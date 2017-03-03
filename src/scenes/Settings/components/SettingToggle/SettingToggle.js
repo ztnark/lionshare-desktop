@@ -1,13 +1,13 @@
 import React from 'react';
 import { Flex } from 'reflexbox';
 
-import styles from './SettingToggle.scss';
+import styles from './SettingToggleStyle';
 import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
 
 const SettingToggle = ({ children }) => (
-  <Flex className={styles.container}>
-    {children}
+  <Flex className={ styles.container }>
+    { children }
   </Flex>
 );
 
@@ -16,11 +16,14 @@ const ToggleOption = ({ onClick, selected, children }) => (
     align="center"
     justify="center"
     role="button"
-    onClick={onClick}
-    className={cx(styles.option, { selected })}
+    onClick={ onClick }
+    className={ cx(styles.option, { selected }) }
   >
-    {children}
+    { children }
   </Flex>
 );
 
-export { SettingToggle, ToggleOption };
+export {
+  SettingToggle,
+  ToggleOption,
+};

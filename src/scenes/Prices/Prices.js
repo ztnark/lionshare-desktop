@@ -1,38 +1,73 @@
 import React, { PropTypes } from 'react';
-import { observer, inject } from 'mobx-react';
+import { View, Text, ListView } from 'react-native';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-import Layout from 'components/Layout';
-import PriceList from './components/PriceList';
+import { fetchPrices } from '../../actions/index';
 
-@inject('prices', 'ui')
-@observer
+import Layout from '../../components/Layout/index';
+import PriceList from './components/PriceList/index';
+import stores from '../../stores/index';
+
+
+// @inject('prices', 'ui')
+// @observer
 class Prices extends React.Component {
   static propTypes = {
-    prices: PropTypes.object.isRequired,
+    prices: PropTypes.array.isRequired,
     ui: PropTypes.object.isRequired,
-  };
+  }
+
+  componentDidMount() {
+    this.props.fetchPrices();
+  }
+
+  componentWillMount() {
+    const ds = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2
+    });
+
+    this.setState({
+      dataSource: ds.cloneWithRows(this.props.prices)
+    });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const ds = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2
+    });
+
+    this.setState({
+      dataSource: ds.cloneWithRows(nextProps)
+    });
+  }
+
+  renderRow(prices){
+    return <PriceList
+      assets={ prices }
+    />;
+  }
 
   render() {
-    const {
-      isLoaded,
-      priceListData,
-    } = this.props.prices;
-    const {
-      visibleCurrencies,
-      sortBy,
-    } = this.props.ui;
-
     return (
-      <Layout title={'Prices'} activeTab="prices">
-        {isLoaded &&
-          <PriceList
-            assets={priceListData}
-            visibleCurrencies={visibleCurrencies}
-            sortBy={sortBy}
-          />}
+      <Layout
+        title={ 'Prices' }
+        activeTab="prices"
+        prices={this.props.prices}
+        ui={stores.ui}
+      >
+          <ListView
+            dataSource={this.state.dataSource}
+            renderRow={this.renderRow.bind(this)}
+            style={{"height": 613}}
+          />
       </Layout>
     );
   }
 }
 
-export default Prices;
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ fetchPrices }, dispatch);
+}
+
+export default connect(null, mapDispatchToProps)(Prices);

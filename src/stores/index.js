@@ -1,16 +1,15 @@
-import { ipcRenderer } from 'electron';
+// import { ipcRenderer } from 'electron';
 import UiStore from './UiStore';
-import PricesStore from './PricesStore';
+// import PricesStore from './PricesStore';
 
 const ui = new UiStore();
-const prices = new PricesStore();
+// const prices = new PricesStore();
 
-// Open views from application menu (/desktop/menu.js)
-ipcRenderer.on('showSettings', () => ui.changeView('settings'));
-ipcRenderer.on('showPrices', () => ui.changeView('prices'));
-ipcRenderer.on('showPortfolio', () => ui.changeView('portfolio'));
+// Open settings from application menu
+// ipcRenderer.on('showSettings', () => {
+//   ui.changeView('settings');
+// });
 
 export default {
-  ui,
-  prices,
+  ui
 };

@@ -1,0 +1,1 @@
+module.exports = require('react-native').StyleSheet.create({"number":{"width":130,"paddingTop":5,"paddingBottom":5,"paddingLeft":0,"paddingRight":0,"backgroundColor":"transparent","color":"#FFFFFF","textAlign":"right","fontFamily":"'San Francisco Mono', monospace","fontSize":13,"fontWeight":"500"},"number:focus::-webkit-input-placeholder":{"color":"rgba(255,255,255,0.5)"}});

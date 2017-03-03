@@ -1,40 +1,44 @@
 import React, { PropTypes } from 'react';
-import { observer, inject } from 'mobx-react';
-import { Flex } from 'reflexbox';
+import { AppRegistry, View, Text } from 'react-native';
+import { connect } from 'react-redux';
 
-import 'styles/base.scss';
 
-import Prices from 'scenes/Prices';
-import Portfolio from 'scenes/Portfolio';
-import Settings from 'scenes/Settings';
+import Prices from '../../scenes/Prices/index';
+import Portfolio from '../../scenes/Portfolio/index';
+import Settings from '../../scenes/Settings/index';
+import stores from '../../stores/index';
 
-@inject('ui')
-@observer
 class Application extends React.Component {
   static propTypes = {
     ui: PropTypes.object.isRequired,
-  };
+  }
 
   renderView = () => {
+    this.props.ui.view = 'prices';
     switch (this.props.ui.view) {
       case 'prices':
-        return <Prices />;
+        return <Prices prices={this.props.prices} ui={this.props.ui}/>;
       case 'portfolio':
         return <Portfolio />;
       case 'settings':
         return <Settings />;
       default:
-      // no-op
+        // no-op
     }
-  };
+  }
 
   render() {
     return (
-      <Flex auto>
-        {this.renderView()}
-      </Flex>
+      <View>
+        { this.renderView() }
+      </View>
     );
   }
+
 }
 
-export default Application;
+const mapStateToProps = state => {
+  return { prices: state.prices };
+};
+
+export default connect(mapStateToProps)(Application);

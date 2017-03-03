@@ -1,4 +1,4 @@
-@import '~styles/constants.scss';
+@import '../../../../styles/constants.scss';
 
 .container {
   position: relative;
@@ -35,12 +35,10 @@
 .row {
   flex-shrink: 0;
   margin-bottom: 15px;
-  cursor: text;
 }
 
 .colorDot {
   margin-right: 12px;
-  cursor: default;
 }
 
 .symbol {
@@ -58,7 +56,7 @@
 }
 
 .overlayWrapper {
-  max-width: 275px;
+  max-width: 275;
   text-align: center;
 }
 
@@ -82,10 +80,6 @@
 
 .overlayText {
   margin-bottom: 30px;
-}
-
-.emphasis {
-  text-decoration: underline;
 }
 
 .overlayButton {

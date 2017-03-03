@@ -3,4 +3,7 @@ import HeaderTab from './HeaderTab';
 import SettingsTab from './SettingsTab';
 
 export default Header;
-export { HeaderTab, SettingsTab };
+export {
+  HeaderTab,
+  SettingsTab,
+};

@@ -1,28 +1,22 @@
 import React, { PropTypes } from 'react';
-import { Flex } from 'reflexbox';
+import { View, Text } from 'react-native';
+
+import styles from './HeaderStyle';
 import classNames from 'classnames/bind';
 
-import styles from './Header.scss';
-
-const cx = classNames.bind(styles);
-
-const Header = props => (
-  <Flex
+const Header = (props) => (
+  <View
     align="center"
     justify="center"
-    className={cx(styles.header, { border: props.border })}
+    style={styles.header}
   >
-    {props.children}
-  </Flex>
+    { props.children }
+  </View>
 );
 
 Header.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
   border: PropTypes.bool,
-};
-
-Header.defaultProps = {
-  border: true,
 };
 
 export default Header;

@@ -2,20 +2,14 @@ import numeral from 'numeral';
 
 const formatNumber = (amount, currency, options = {}) => {
   if (!(options.maximumFractionDigits || options.maximumFractionDigits === 0)) {
-    options.maximumFractionDigits = Math.max(
-      0,
-      7 - parseInt(amount, 10).toString().length
-    );
+    options.maximumFractionDigits = 7 - parseInt(amount, 10).toString().length;
   }
 
   let value = new Intl.NumberFormat(navigator.language, {
-    style: 'decimal',
+    style: currency ? 'currency' : 'decimal',
+    currency,
     ...options,
   }).format(Math.abs(amount));
-
-  if (currency) {
-    value = `$${value}`;
-  }
 
   if (options.directionSymbol) {
     const direction = amount >= 0.0 ? '+' : '-';
@@ -24,8 +18,8 @@ const formatNumber = (amount, currency, options = {}) => {
 
   if (options.minPrecision) {
     // Set min precision
-    value = value.replace(/\d+(?:,\d+)*(?:\.\d+)?/, match => {
-      const matchValue = parseFloat(match.replace(/,/g, ''));
+    value = value.replace(/\d+(?:\,\d+)*(?:\.\d+)?/, (match) => {
+      const matchValue = parseFloat(match.replace(',', ''));
       if (matchValue >= 0.1 || options.directionSymbol) {
         match = numeral(matchValue).format('0,0.00');
       }
@@ -36,5 +30,6 @@ const formatNumber = (amount, currency, options = {}) => {
   return value;
 };
 
-// eslint-disable-next-line import/prefer-default-export
-export { formatNumber };
+export {
+  formatNumber,
+};

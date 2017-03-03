@@ -1,0 +1,1 @@
+module.exports = require('react-native').StyleSheet.create({"up":{"color":"#2ACB42"},"down":{"color":"#FB2C2C"}});

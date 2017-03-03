@@ -6,23 +6,15 @@
   justify-content: center;
   padding: 10 20px;
 
-  background: transparent;
+  background-color: transparent;
   color: $darkGray;
-  border: none;
-
-  cursor: default;
 
   &.active {
     color: $white;
     opacity: 1;
-    cursor: pointer;
   }
 
   &:hover {
     color: $white;
   }
-}
-
-button:focus {
-  outline:0;
 }

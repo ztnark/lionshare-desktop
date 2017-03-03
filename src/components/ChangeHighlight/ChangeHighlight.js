@@ -1,32 +1,25 @@
 import React, { PropTypes } from 'react';
+import { View, Text } from 'react-native';
+import styles from './ChangeHighlightStyle';
 import classNames from 'classnames/bind';
-
-import styles from './ChangeHighlight.scss';
-
 const cx = classNames.bind(styles);
 
 class ChangeHighlight extends React.Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
-    trigger: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]).isRequired,
-  };
+    trigger: PropTypes.any.isRequired,
+  }
 
   state = {
     highlight: false,
     direction: null,
-  };
+  }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.trigger !== nextProps.trigger) {
       this.setState({
         highlight: true,
-        direction: parseFloat(nextProps.trigger) >
-          parseFloat(this.props.trigger)
-          ? 'up'
-          : 'down',
+        direction: parseFloat(nextProps.trigger) > parseFloat(this.props.trigger) ? 'up' : 'down',
       });
       setTimeout(() => this.setState({ highlight: false }), 2500);
     }
@@ -42,11 +35,9 @@ class ChangeHighlight extends React.Component {
     } = this.state;
 
     return (
-      <span
-        className={cx(styles.number, { [`${direction}Highlight`]: highlight })}
-      >
-        {children}
-      </span>
+      <View
+        className={ cx(styles.number, { [`${direction}Highlight`]: highlight })}
+      ><Text>{ children }</Text></View>
     );
   }
 }

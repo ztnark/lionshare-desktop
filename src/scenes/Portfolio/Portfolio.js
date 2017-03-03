@@ -2,30 +2,30 @@ import React, { PropTypes } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Doughnut } from 'react-chartjs-2';
 
-import { formatNumber } from 'utils/formatting';
+import { formatNumber } from '../../utils/formatting';
 
 import { Flex } from 'reflexbox';
 
-import Layout from 'components/Layout';
-import FatButton from 'components/FatButton';
+import Layout from '../../components/Layout';
+import FatButton from '../../components/FatButton';
 import EditAssets from './components/EditAssets';
 import AssetList from './components/AssetList';
 import Divider from './components/Divider';
-import ChangeHighlight from 'components/ChangeHighlight';
-import ColoredChange from 'components/ColoredChange';
+import ChangeHighlight from '../../components/ChangeHighlight';
+import ColoredChange from '../../components/ColoredChange';
 
 import PortfolioStore from './PortfolioStore';
 
-import styles from './Portfolio.scss';
+// import styles from './Portfolio.scss';
 
-@inject('prices', 'ui')
-@observer
+// @inject('prices', 'ui')
+// @observer
 class Portfolio extends React.Component {
   static propTypes = {
     prices: PropTypes.object.isRequired,
     ui: PropTypes.object.isRequired,
     balances: PropTypes.object,
-  };
+  }
 
   constructor(props) {
     super(props);
@@ -48,12 +48,17 @@ class Portfolio extends React.Component {
   get footer() {
     return (
       <Footer>
-        {this.store.showEditCancel &&
-          <FatButton label="Cancel" onClick={this.store.toggleEdit} active />}
+        { this.store.showEditCancel && (
+          <FatButton
+            label="Cancel"
+            onClick={ this.store.toggleEdit }
+            active
+          />
+        ) }
         <FatButton
           label="Save"
-          onClick={this.store.saveEdit}
-          active={this.store.allowSave}
+          onClick={ this.store.saveEdit }
+          active={ this.store.allowSave }
         />
       </Footer>
     );
@@ -67,70 +72,66 @@ class Portfolio extends React.Component {
 
     return (
       <Layout>
-        {this.store.isLoaded &&
+        { this.store.isLoaded && (
           <Flex column justify="space-between" auto>
-            {!this.store.isEditing &&
-              <div className={styles.balance}>
-                <Doughnut
-                  height={185}
-                  data={this.store.doughnutData}
-                  options={this.chartOptions}
-                />
-                <div className={styles.balanceContainer}>
-                  <div
-                    className={
-                      this.store.totalBalance < 1000000
-                        ? styles.balanceAmount
-                        : styles.balanceAmountSmall
-                    }
-                  >
-                    <ChangeHighlight trigger={this.store.totalBalance}>
-                      {formatNumber(this.store.totalBalance, 'USD', {
-                        maximumFractionDigits: 0,
-                      })}
+            { !this.store.isEditing &&
+              <View className={ styles.balance }>
+              <Doughnut
+                height={ 185 }
+                data={ this.store.doughnutData }
+                options={ this.chartOptions }
+              />
+                <View className={styles.balanceContainer}>
+                  <View className={styles.balanceAmount}>
+                    <ChangeHighlight trigger={ this.store.totalBalance }>
+                      { formatNumber(this.store.totalBalance, 'USD', { maximumFractionDigits: 0 }) }
                     </ChangeHighlight>
-                  </div>
-                  <div className={styles.balanceTotal}>
-                    <ColoredChange direction={direction}>
-                      {formatNumber(this.store.totalChange, 'USD', {
-                        directionSymbol: true,
-                        minPrecision: true,
-                      })}
+                  </View>
+                  <View className={ styles.balanceTotal }>
+                    <ColoredChange direction={ direction }>
+                      { formatNumber(this.store.totalChange, 'USD', { directionSymbol: true,
+                                                                      minPrecision: true }) }
                     </ColoredChange>
-                  </div>
-                </div>
-              </div>}
+                  </View>
+                </View>
+              </View>
+            }
 
             <Flex auto column className={styles.content}>
-              {this.store.isEditing
-                ? <Flex auto column>
-                    <EditAssets
-                      balances={this.store.rawEditedBalances}
-                      totalBalance={this.store.totalBalance}
-                      onChange={this.store.updateBalance}
-                      visibleCurrencies={this.props.ui.visibleCurrencies}
-                      editMode={this.store.editMode}
-                      toggleEditMode={this.store.toggleEditMode}
-                      fiatCurrency={this.store.fiatCurrency}
-                      toggleOnboarding={this.store.toggleOnboarding}
-                      showOnboarding={this.store.showOnboarding}
-                    />
-                    {this.footer}
-                  </Flex>
-                : <Flex auto column>
-                    <Divider onClick={this.store.toggleEdit}>Edit</Divider>
-                    <AssetList assets={this.store.assetListData} />
-                  </Flex>}
+              { this.store.isEditing ? (
+                <Flex auto column>
+                  <EditAssets
+                    balances={ this.store.editedBalances }
+                    totalBalance={ this.store.totalBalance }
+                    onChange={ this.store.updateBalance }
+                    visibleCurrencies={ this.props.ui.visibleCurrencies }
+                    editMode={ this.store.editMode }
+                    toggleEditMode={ this.store.toggleEditMode }
+                    fiatCurrency={ this.store.fiatCurrency }
+                    toggleOnboarding={ this.store.toggleOnboarding }
+                    showOnboarding={ this.store.showOnboarding }
+                  />
+                  { this.footer }
+                </Flex>
+              ) : (
+                <Flex auto column>
+                  <Divider onClick={ this.store.toggleEdit }>Edit</Divider>
+                  <AssetList
+                    assets={ this.store.assetListData }
+                  />
+                </Flex>
+              ) }
             </Flex>
-          </Flex>}
+          </Flex>
+        ) }
       </Layout>
     );
   }
 }
 
 const Footer = ({ children }) => (
-  <Flex auto className={styles.footer}>
-    {children}
+  <Flex auto className={ styles.footer }>
+    { children }
   </Flex>
 );
 

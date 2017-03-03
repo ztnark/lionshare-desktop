@@ -1,44 +1,51 @@
 import React from 'react';
-import { Flex } from 'reflexbox';
+import { View, Text } from 'react-native';
 import { observer } from 'mobx-react';
-import { Line } from 'react-chartjs-2';
-import numeral from 'numeral';
+import Svg,{
+    Polyline
+} from 'react-native-svg';
 
-import { formatNumber } from 'utils/formatting';
-import { sortByType } from 'utils/sortBy';
+import { formatNumber } from '../../../../utils/formatting';
 
-import CurrencyColor from 'components/CurrencyColor';
-import ChangeHighlight from 'components/ChangeHighlight';
-import ColoredChange from 'components/ColoredChange';
+import CurrencyColor from '../../../../components/CurrencyColor';
+import ChangeHighlight from '../../../../components/ChangeHighlight';
+import ColoredChange from '../../../../components/ColoredChange';
+import { CURRENCIES } from '../../../../utils/currencies';
+import * as ChatActions from '../../../../actions/ChatActions.js';
+import WSInstance from '../../../../utils/ChatWebsocket.js';
+
 
 import classNames from 'classnames/bind';
-import styles from './PriceList.scss';
-const cx = classNames.bind(styles);
+import styles from './PriceListStyle';
 
-const PriceList = ({ assets, visibleCurrencies, sortBy }) => {
-  const includedAssets = assets.filter(asset =>
-    visibleCurrencies.includes(asset.symbol));
-  const sorted = sortByType(includedAssets, sortBy);
-
+const PriceList = ({ assets }) => {
+  if(typeof assets[0] === "undefined"){
+    return null;
+  }
+  visibleCurrencies = CURRENCIES.map(currency => currency.symbol);
+  const includedAssets = assets[0].filter(asset => visibleCurrencies.includes(asset.symbol));
   return (
-    <Flex auto column className={styles.container}>
-      {sorted.map(asset => <AssetRow key={asset.symbol} {...asset} />)}
-    </Flex>
+    <View>
+      { includedAssets.map(asset => (
+        <AssetRow
+          key={ asset.symbol }
+          { ...asset }
+        />
+      )) }
+    </View>
   );
 };
 
-const AssetRow = (
-  {
-    symbol,
-    color,
-    price,
-    change,
-    chartData,
-    highestPrice,
-    lowestPrice,
-    marketCap,
-  },
-) => {
+const AssetRow = ({
+  symbol,
+  color,
+  price,
+  change,
+  chartData,
+  highestPrice,
+  lowestPrice,
+  marketCap,
+}) => {
   const direction = change >= 0 ? 'up' : 'down';
   const chartOptions = {
     animation: false,
@@ -49,72 +56,112 @@ const AssetRow = (
       enabled: false,
     },
     scales: {
-      xAxes: [
-        {
-          display: false,
-        },
-      ],
-      yAxes: [
-        {
-          display: false,
-        },
-      ],
+      xAxes: [{
+        display: false,
+      }],
+      yAxes: [{
+        display: false,
+      }],
     },
   };
 
+  function scaleBetween(unscaledNum, minAllowed, maxAllowed, min, max) {
+    return (maxAllowed - minAllowed) * (unscaledNum - min) / (max - min) + minAllowed;
+  }
+
+  function scale(unscaledNums){
+    var scaledNums = []
+    var maxRange = Math.max.apply(Math, unscaledNums);
+    var minRange = Math.min.apply(Math, unscaledNums);
+
+    for (var i = 0; i < unscaledNums.length; i++) {
+      var unscaled = unscaledNums[i];
+      var scaled = scaleBetween(unscaled, 2, 40, minRange, maxRange);
+      // adjust for SVG 0,0 being top
+      scaled = (scaled - (40 * 0.5)) * -1 + (40 * 0.5);
+      scaledNums[i] = scaled
+    }
+    return scaledNums;
+  }
+
+  function addXAxisPoints(points){
+    var pointsDist = 125 / points.length;
+    for (var i = 0; i < points.length; i++) {
+      points[i] = [pointsDist * i ,points[i]]
+    }
+    return points.join();
+  }
+
+  function formatPoints(data){
+    var scaledNums = scale(data);
+    var points = addXAxisPoints(scaledNums);
+    return points;
+  }
+
   return (
-    <Flex align="center" justify="space-between" className={styles.row}>
-      <Flex className={styles.rowLeft}>
-        <CurrencyColor color={color} className={styles.colorDot} />
-        <div className={cx(styles.currencyCode, { tight: symbol.length >= 5 })}>
-          {symbol}
-        </div>
-        <Flex column className={styles.data}>
-          <div className={styles.price}>
-            <ChangeHighlight trigger={price}>
-              {formatNumber(price, 'USD', { minPrecision: true })}
+    <View
+      align="center"
+      justify="space-between"
+      style={ styles.row }
+    >
+      <View row style={ styles.rowLeft }>
+        <CurrencyColor color={ color } style={ styles.colorDot } />
+      </View>
+      <View>
+        <View row
+          style={ styles.currencyCode }
+        >
+          <Text style={ styles.symbol }>{ symbol }</Text>
+        </View>
+      </View>
+      <View style={{ "padding": 12, "marginLeft": -20, "flex": .5}}>
+        <View column>
+          <View>
+            <ChangeHighlight trigger={ price }>
+              <Text style={ styles.price }>
+                { formatNumber(price, 'USD', { minPrecision: true }) }
+              </Text>
             </ChangeHighlight>
-          </div>
-          <div>
-            <ColoredChange direction={direction}>
-              {formatNumber(change, undefined, {
-                directionSymbol: true,
-                minPrecision: true,
-              })}%
+            {/*<ChangeHighlight trigger={ price }>
+              { formatNumber(price, 'USD', { minPrecision: true }) }
+            </ChangeHighlight>
+            */}
+          </View>
+          <View>
+            <ColoredChange direction={ direction }>
+              <Text style={ styles[direction] }>
+                { formatNumber(change, undefined, { directionSymbol: true,
+                                                  minPrecision: true }) }%
+              </Text>
             </ColoredChange>
-          </div>
-        </Flex>
-      </Flex>
-      <Flex className={styles.rowRight} align="center">
-        <div className={styles.chart}>
-          <Line
-            width={125}
-            height={42}
-            data={chartData}
-            options={chartOptions}
-            redraw
-          />
-        </div>
-        <Flex column justify="space-between" className={styles.highlow}>
-          <Flex justify="space-between" className={styles.high}>
-            <span className={styles.label}>H</span>
-            <span>
-              {formatNumber(highestPrice, 'USD', { minPrecision: true })}
-            </span>
-          </Flex>
-          <Flex justify="space-between" className={styles.low}>
-            <span className={styles.label}>L</span>
-            <span>
-              {formatNumber(lowestPrice, 'USD', { minPrecision: true })}
-            </span>
-          </Flex>
-          <Flex justify="space-between" className={styles.cap}>
-            <span className={styles.label}>M</span>
-            <span>${numeral(marketCap).format('0.0a')}</span>
-          </Flex>
-        </Flex>
-      </Flex>
-    </Flex>
+          </View>
+        </View>
+      </View>
+      <View style={ styles.rowRight }>
+        <View style={ styles.chart }>
+           <Svg width="125" height="42" xmlns="http://www.w3.org/2000/svg">
+              <Polyline fill="none" stroke={ color } strokeWidth="3" strokeLinejoin="round"
+              points={formatPoints(chartData.datasets[0].data)}/>
+            </Svg>
+        </View>
+        {/*
+        <View column justify="space-between" className={ styles.highlow }>
+          <View justify="space-between" className={ styles.high }>
+            <View><Text className={ styles.label }>H</Text></View>
+            <View><Text>{ formatNumber(highestPrice, 'USD', { minPrecision: true }) }</Text></View>
+          </View>
+          <View justify="space-between" className={ styles.low }>
+            <View className={ styles.label }><Text>L</Text></View>
+            <View><Text>{ formatNumber(lowestPrice, 'USD', { minPrecision: true }) }</Text></View>
+          </View>
+          <View justify="space-between" className={ styles.cap }>
+            <View className={ styles.label }><Text>M</Text></View>
+            <View><Text>${ marketCap }</Text></View>
+          </View>
+        </View>
+        */}
+      </View>
+    </View>
   );
 };
 

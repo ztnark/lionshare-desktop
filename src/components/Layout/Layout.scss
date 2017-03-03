@@ -1,4 +1,4 @@
-@import "~styles/constants.scss";
+@import "../../styles/constants.scss";
 
 .footer {
   position: relative;
@@ -13,7 +13,6 @@
 
 .footerLink {
   color: $gray;
-  text-decoration: none;
 
   &:hover {
     color: $white;

@@ -1,41 +1,32 @@
 import { observable, computed, action, asMap, autorun } from 'mobx';
-import { ipcRenderer } from 'electron';
-import EventEmitter from 'events';
+import _ from 'lodash';
+// import { ipcRenderer } from 'electron';
 
-import { currencyData } from 'utils/currencies';
-import { formatNumber } from 'utils/formatting';
+import { currencyData } from '../../utils/currencies';
+import { formatNumber } from '../../utils/formatting';
 
 const PORTFOLIO_KEY = 'PORTFOLIO_KEY';
 
 class PortfolioStore {
-  @observable balances = asMap({});
-  @observable changes = asMap({});
-  @observable editMode = 'crypto';
-  @observable rawEditedBalances = asMap({}); // Temporary when user enters edit mode
+  balances = asMap({});
+  changes = asMap({});
+  editMode = 'crypto';
+  editedBalances = asMap({}); // Temporary when user enters edit mode
 
-  @observable isEditing = false;
-  @observable hideOnboarding = false;
+  isEditing = false;
+  hideOnboarding = false;
 
   /* computed */
 
-  @computed get editedBalances() {
-    const balances = {};
-    this.rawEditedBalances.forEach((amount, currency) => {
-      balances[currency] = parseFloat(amount);
-    });
-
-    return asMap(balances);
-  }
-
-  @computed get isLoaded() {
+  get isLoaded() {
     return this.prices.isLoaded;
   }
 
-  @computed get activeBalances() {
+  get activeBalances() {
     return this.isEditing ? this.editedBalances : this.balances;
   }
 
-  @computed get totalBalance() {
+  get totalBalance() {
     let value = 0.0;
 
     if (this.editMode === 'crypto') {
@@ -53,7 +44,7 @@ class PortfolioStore {
     return value;
   }
 
-  @computed get totalChange() {
+  get totalChange() {
     let value = 0.0;
     this.balances.forEach((amount, currency) => {
       value += this.prices.change(amount, currency);
@@ -61,7 +52,7 @@ class PortfolioStore {
     return value;
   }
 
-  @computed get assetListData() {
+  get assetListData() {
     const currencies = this.balances.keys();
     return currencies.map(currency => {
       const balance = this.balances.get(currency);
@@ -77,110 +68,98 @@ class PortfolioStore {
     });
   }
 
-  @computed get userDataReady() {
+  get userDataReady() {
     return this.balances.keys().length > 0;
   }
 
-  @computed get allowSave() {
-    return this.editedBalances.keys().length > 0 && this.totalBalance > 0.0;
+  get allowSave() {
+    return this.editedBalances.keys().length > 0 &&
+      this.totalBalance > 0.0;
   }
 
-  @computed get doughnutData() {
+  get doughnutData() {
     const data = {
-      datasets: [
-        {
-          borderWidth: 0,
-          data: [0.01],
-          backgroundColor: ['rgba(255, 255, 255, 0.20)'],
-          hoverBackgroundColor: ['rgba(255, 255, 255, 0.20)'],
-        },
-      ],
+      datasets: [{
+        borderWidth: 0,
+        data: [0.01],
+        backgroundColor: ['rgba(255, 255, 255, 0.20)'],
+        hoverBackgroundColor: ['rgba(255, 255, 255, 0.20)'],
+      }],
     };
     if (this.userDataReady || this.isEditing) {
       this.activeBalances.forEach((amount, currency) => {
         data.datasets[0].data.push(this.prices.convert(amount, currency));
         data.datasets[0].backgroundColor.push(currencyData(currency).color);
-        data.datasets[0].hoverBackgroundColor.push(
-          currencyData(currency).color
-        );
+        data.datasets[0].hoverBackgroundColor.push(currencyData(currency).color);
       });
     }
     return data;
   }
 
-  @computed get fiatCurrency() {
+  get fiatCurrency() {
     return 'USD';
   }
 
-  @computed get showEditCancel() {
+  get showEditCancel() {
     return this.userDataReady;
   }
 
-  @computed get showOnboarding() {
+  get showOnboarding() {
     return this.totalBalance <= 0.0 && !this.hideOnboarding;
   }
 
   /* actions */
 
-  @action toggleEdit = () => {
+  toggleEdit = () => {
     this.isEditing = !this.isEditing;
-    this.rawEditedBalances.clear();
+    this.editedBalances.clear();
     this.editMode = 'crypto';
     if (this.isEditing) {
-      this.rawEditedBalances.merge(this.balances);
+      this.editedBalances.merge(this.balances);
     }
-  };
+  }
 
-  @action toggleEditMode = () => {
+  toggleEditMode = () => {
     if (this.editMode === 'crypto') {
       this.editMode = 'fiat';
       this.editedBalances.forEach((amount, currency) => {
-        this.rawEditedBalances.set(
-          currency,
-          this.prices.convert(amount, currency)
-        );
+        this.editedBalances.set(currency, this.prices.convert(amount, currency));
       });
     } else {
       this.editMode = 'crypto';
       this.editedBalances.forEach((amount, currency) => {
-        this.rawEditedBalances.set(
-          currency,
-          amount / this.prices.convert(1.00, currency)
-        );
+        this.editedBalances.set(currency, amount / this.prices.convert(1.00, currency));
       });
     }
-  };
+  }
 
-  @action updateBalance = event => {
+  updateBalance = (event) => {
     const { name, value } = event.target;
     if (value) {
-      this.rawEditedBalances.set(name, value);
+      this.editedBalances.set(name, _.round(parseFloat(value), 2));
     } else {
-      this.rawEditedBalances.delete(name);
+      this.editedBalances.delete(name);
     }
-  };
+  }
 
-  @action saveEdit = () => {
+  saveEdit = () => {
     if (this.editMode === 'fiat') this.toggleEditMode();
 
     // Clean empty values
     this.editedBalances.keys().forEach(currency => {
-      if (this.editedBalances.get(currency) <= 0.0)
-        this.rawEditedBalances.delete(currency);
+      if (this.editedBalances.get(currency) <= 0.0) this.editedBalances.delete(currency);
     });
 
     this.balances.clear();
     this.balances.merge(this.editedBalances);
-    // Persist store to localStorage
-    localStorage.setItem(PORTFOLIO_KEY, this.toJSON());
     this.toggleEdit();
-  };
+  }
 
-  @action toggleOnboarding = () => {
+  toggleOnboarding = () => {
     this.hideOnboarding = true;
-  };
+  }
 
-  @action fromJSON = jsonData => {
+  fromJSON = (jsonData) => {
     const parsed = JSON.parse(jsonData);
     if (parsed.balances) {
       // Only set balances that are also visible, disregard others
@@ -195,13 +174,15 @@ class PortfolioStore {
       // Don't show balance again if the user has already set values
       if (this.totalBalance > 0) this.hideOnboarding = true;
     }
-  };
+  }
 
   /* other */
 
-  toJSON = () => JSON.stringify({
-    balances: this.balances,
-  });
+  toJSON = () => (
+    JSON.stringify({
+      balances: this.balances,
+    })
+  )
 
   constructor(options) {
     // General store references
@@ -220,23 +201,20 @@ class PortfolioStore {
       this.isEditing = true;
     }
 
-    if (EventEmitter.listenerCount(ipcRenderer, 'priceSetting') === 0) {
-      ipcRenderer.on('priceSetting', (_event, setting) => {
-        if (setting) {
-          ipcRenderer.send(
-            'priceUpdate',
-            formatNumber(this.totalChange, 'USD', {
-              directionSymbol: true,
-              minPrecision: true,
-            })
-          );
-        } else {
-          ipcRenderer.send('priceUpdate', '');
-        }
-      });
-    }
+    // ipcRenderer.on('priceSetting', (_event, setting) => {
+    //   if (setting) {
+    //     ipcRenderer.send('priceUpdate', formatNumber(this.totalChange, 'USD', {
+    //       directionSymbol: true,
+    //       minPrecision: true,
+    //     }));
+    //   } else {
+    //     ipcRenderer.send('priceUpdate', '');
+    //   }
+    // });
 
     autorun(() => {
+      // Persist store to localStorage
+      localStorage.setItem(PORTFOLIO_KEY, this.toJSON());
       // Taskbar change updates
       const trayChange = formatNumber(this.totalChange, 'USD', {
         directionSymbol: true,

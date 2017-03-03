@@ -1,13 +1,8 @@
-@import '~styles/constants.scss';
-
-.container {
-  overflow-y: scroll;
-}
+@import '../../../../styles/constants.scss';
 
 .row {
   position: relative;
   flex-shrink: 0;
-  overflow-x: hidden;
 
   & + .row {
     border-top: 1px solid $darkGray;
@@ -26,12 +21,6 @@
   &:hover {
     .chart {
       opacity: 0.35;
-      transition: opacity 0.25s ease;
-    }
-
-    .highlow {
-      transform: translateX(0px);
-      transition: transform 0.25s ease;
     }
   }
 }
@@ -43,10 +32,6 @@
 
 .currencyCode {
   width: 38px;
-}
-
-.tight {
-  letter-spacing: -1px;
 }
 
 .price {
@@ -66,10 +51,6 @@
   color: $down;
 }
 
-.chart {
-  transition: opacity 0.25s ease;
-}
-
 .highlow {
   position: absolute;
   right: 0px;
@@ -77,8 +58,6 @@
   padding-left: 15px;
   font-size: 10px;
   text-align: right;
-  transform: translateX(90px);
-  transition: transform 0.25s ease;
 }
 
 .high {

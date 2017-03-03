@@ -1,7 +1,7 @@
 import React from 'react';
 import { Flex } from 'reflexbox';
 
-import styles from './Divider.scss';
+import styles from './DividerStyle';
 import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
 
@@ -9,11 +9,11 @@ const Divider = ({ children, onClick, active }) => (
   <Flex
     align="center"
     justify="center"
-    className={cx(styles.container, { active })}
+    className={ cx(styles.container, { active }) }
   >
-    <div className={cx(styles.content, { action: onClick })} onClick={onClick}>
-      {children}
-    </div>
+    <View className={ cx(styles.content, { action: onClick }) } onClick={ onClick }>
+      { children }
+    </View>
   </Flex>
 );
 

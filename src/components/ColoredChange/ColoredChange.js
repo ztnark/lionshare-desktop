@@ -1,12 +1,13 @@
 import React, { PropTypes } from 'react';
+import { View, Text } from 'react-native';
+import styles from './ColoredChangeStyle';
 import classNames from 'classnames/bind';
-
-import styles from './ColoredChange.scss';
-
 const cx = classNames.bind(styles);
 
 const ColoredChange = ({ children, direction }) => (
-  <span className={cx(styles[direction])}>{children}</span>
+  <View
+    className={ cx(styles[direction]) }
+  ><Text>{ children }</Text></View>
 );
 
 ColoredChange.propTypes = {

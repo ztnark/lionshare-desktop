@@ -1,15 +1,14 @@
 import React from 'react';
+import { View } from 'react-native';
+import styles from './CurrencyColorStyle';
 import classNames from 'classnames/bind';
-
-import styles from './CurrencyColor.scss';
-
 const cx = classNames.bind(styles);
 
+
 const CurrencyColor = ({ color, className }) => (
-  <div
-    className={cx(styles.container, className)}
-    style={{ backgroundColor: color }}
-  />
+  <View
+    style={ [styles.container, { "backgroundColor": color }] }
+  ></View>
 );
 
 export default CurrencyColor;

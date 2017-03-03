@@ -1,21 +1,25 @@
 import _ from 'lodash';
+import numeral from 'numeral';
 import { observable, computed, action, autorun } from 'mobx';
 import ReconnectingWebsocket from 'reconnecting-websocket';
+import { AsyncStorage } from 'react-native';
 
-import { currencyColors } from 'utils/currencies';
+import { currencyColors } from '../utils/currencies';
+
+var localStorage = AsyncStorage;
 
 const PRICES_STORE_KEY = 'PRICES_STORE_KEY';
 
 export default class PricesStore {
-  @observable rateData = {};
-  @observable marketData = {};
-  @observable period = 'day';
-  @observable isLoaded = false;
-  @observable error = null;
+  rateData = {};
+  marketData = {};
+  period = 'day';
+  isLoaded = false;
+  error = null;
 
   /* computed */
 
-  @computed get rates() {
+  get rates() {
     let data;
     if (this.isLoaded) {
       data = {};
@@ -26,7 +30,7 @@ export default class PricesStore {
     return data;
   }
 
-  @computed get changes() {
+  get changes() {
     let data;
     if (this.isLoaded) {
       data = {};
@@ -38,7 +42,7 @@ export default class PricesStore {
     return data;
   }
 
-  @computed get priceListData() {
+  get priceListData() {
     let data;
     if (this.isLoaded) {
       data = [];
@@ -46,10 +50,10 @@ export default class PricesStore {
         const color = currencyColors[key];
         const labels = [];
         const historic = [];
-        value.forEach(rate => {
+        for (const rate of value) {
           historic.push(parseFloat(rate));
           labels.push('');
-        });
+        }
 
         data.push({
           color,
@@ -58,13 +62,11 @@ export default class PricesStore {
           change: this.changes[key] * 100,
           chartData: {
             labels,
-            datasets: [
-              {
-                radius: 0,
-                borderColor: color,
-                data: historic,
-              },
-            ],
+            datasets: [{
+              radius: 0,
+              borderColor: color,
+              data: historic,
+            }],
           },
           highestPrice: this.highestPrice(key),
           lowestPrice: this.lowestPrice(key),
@@ -78,35 +80,19 @@ export default class PricesStore {
 
   /* actions */
 
-  @action fetchData = async () => {
-    try {
-      const rateRes = await fetch(
-        `${API_URL}/api/prices?period=${this.period}`
-      );
+  fetchData = async () => {
+      const rateRes = await fetch(`https://api.lionshare.capital/api/prices?period=${ this.period }`);
       const rateData = await rateRes.json();
       this.rateData = rateData.data;
 
-      const marketRes = await fetch(`${API_URL}/api/markets`);
+      const marketRes = await fetch(`https://api.lionshare.capital/api/markets`);
       const marketData = await marketRes.json();
       this.marketData = marketData.data;
-
       this.isLoaded = true;
       this.error = null;
-    } catch (_e) {
-      if (!this.isLoaded) {
-        // Only show the error if the first load fails
-        this.error = 'Error loading content, please check your connection and try again.';
-      }
-      setTimeout(
-        () => {
-          this.fetchData();
-        },
-        2000
-      );
-    }
-  };
+  }
 
-  @action updatePrice = message => {
+  updatePrice = (message) => {
     const data = JSON.parse(message.data);
     const cryptoCurrency = data.cryptoCurrency;
     const price = parseFloat(data.price);
@@ -114,75 +100,73 @@ export default class PricesStore {
       const index = this.rateData[cryptoCurrency].length - 1;
       this.rateData[cryptoCurrency][index] = price;
     }
-  };
+  }
 
-  @action connectToWebsocket = () => {
-    this.websocket = new ReconnectingWebsocket(WS_URL, [], {});
+  connectToWebsocket = () => {
+    this.websocket = new ReconnectingWebsocket('wss://api.lionshare.capital', [], {});
     this.websocket.addEventListener('message', this.updatePrice);
-  };
+  }
 
-  @action selectPeriod = period => {
+  selectPeriod = (period) => {
     this.period = period;
     this.fetchData();
-  };
+  }
 
-  @action fromJSON = jsonData => {
-    const parsed = JSON.parse(jsonData);
+  fromJSON = (jsonData) => {
+    const parsed = this;
     this.rateData = parsed.rateData;
     this.marketData = parsed.marketData;
     if (parsed.period) this.period = parsed.period;
     this.isLoaded = true;
-  };
+  }
 
   /* other */
 
-  toJSON = () => JSON.stringify({
-    rateData: this.rateData,
-    marketData: this.marketData,
-    period: this.period,
-  });
+  toJSON = () => (
+    JSON.stringify({
+      rateData: this.rateData,
+      marketData: this.marketData,
+      period: this.period,
+    })
+  )
 
-  highestPrice = currency => {
+  highestPrice = (currency) => {
     let highestPrice = 0.0;
     if (this.isLoaded) {
       highestPrice = Math.max(...this.rateData[currency]);
     }
     return highestPrice;
-  };
+  }
 
-  lowestPrice = currency => {
+  lowestPrice = (currency) => {
     const lowestPrice = 0.0;
     if (this.isLoaded) {
       return Math.min(...this.rateData[currency]);
     }
     return lowestPrice;
-  };
+  }
 
-  marketCap = currency => {
+  marketCap = (currency) => {
     const marketCap = 0.0;
     if (this.isLoaded) {
-      return this.marketData[currency];
+      return numeral(this.marketData[currency]).format('0.0a');
     }
     return marketCap;
-  };
+  }
 
   convert = (amount, currency) => {
     return amount * this.rates[currency];
-  };
+  }
 
   change = (amount, currency) => {
     return this.convert(amount, currency) * this.changes[currency];
-  };
+  }
 
   constructor() {
     // Rehydrate store from persisted data
     const data = localStorage.getItem(PRICES_STORE_KEY);
     if (data) this.fromJSON(data);
 
-    // Persist store to localStorage
-    autorun(() => {
-      localStorage.setItem(PRICES_STORE_KEY, this.toJSON());
-    });
 
     this.fetchData();
     this.connectToWebsocket();
@@ -192,11 +176,8 @@ export default class PricesStore {
     // them from the websocket messages, there is no need
     // to update more frequently than this.
     const interval = 60 * 60 * 1000;
-    setInterval(
-      () => {
-        this.fetchData();
-      },
-      interval
-    );
+    setInterval(() => {
+      this.fetchData();
+    }, interval);
   }
 }
