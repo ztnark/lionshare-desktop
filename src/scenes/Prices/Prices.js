@@ -7,11 +7,7 @@ import { fetchPrices } from '../../actions/index';
 
 import Layout from '../../components/Layout/index';
 import PriceList from './components/PriceList/index';
-import stores from '../../stores/index';
 
-
-// @inject('prices', 'ui')
-// @observer
 class Prices extends React.Component {
   static propTypes = {
     prices: PropTypes.array.isRequired,
@@ -54,7 +50,7 @@ class Prices extends React.Component {
         title={ 'Prices' }
         activeTab="prices"
         prices={this.props.prices}
-        ui={stores.ui}
+        ui={this.props.ui}
       >
           <ListView
             dataSource={this.state.dataSource}

@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import Prices from '../../scenes/Prices/index';
 import Portfolio from '../../scenes/Portfolio/index';
 import Settings from '../../scenes/Settings/index';
-import stores from '../../stores/index';
 
 class Application extends React.Component {
   static propTypes = {
@@ -14,7 +13,6 @@ class Application extends React.Component {
   }
 
   renderView = () => {
-    this.props.ui.view = 'prices';
     switch (this.props.ui.view) {
       case 'prices':
         return <Prices prices={this.props.prices} ui={this.props.ui}/>;
@@ -38,7 +36,7 @@ class Application extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return { prices: state.prices };
+  return { prices: state.prices, ui: state.ui };
 };
 
 export default connect(mapStateToProps)(Application);

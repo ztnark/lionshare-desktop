@@ -25,7 +25,7 @@ const App = () => (
       <StatusBar
         barStyle="light-content"
       />
-      <Application ui = { stores.ui }/>
+      <Application/>
     </View>
   </Provider>
 );
