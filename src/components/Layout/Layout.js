@@ -1,6 +1,11 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { version } from '../../../package.json';
+
+import { changeView } from '../../actions/index';
+
 
 import Header, { HeaderTab, SettingsTab } from '../../components/Header';
 import ErrorMessage from '../../components/ErrorMessage';
@@ -15,9 +20,9 @@ const Layout = ({
   alwaysLoad,
   border = true,
 }) => {
-  const onClickPrices = () => ui.changeView('prices');
-  const onClickPortfolio = () => ui.changeView('portfolio');
-  const onClickSettings = () => ui.changeView('settings');
+  const onClickPrices = () => changeView('prices');
+  const onClickPortfolio = () => changeView('portfolio');
+  const onClickSettings = () => changeView('settings');
   // const openDonateLink = () => shell.openExternal('https://github.com/lionsharecapital/lionshare-desktop#donate');
   // const openVersionLink = () => shell.openExternal('https://github.com/lionsharecapital/lionshare-desktop/releases');
 
@@ -84,5 +89,9 @@ Layout.propTypes = {
   alwaysLoad: React.PropTypes.bool,
   title: React.PropTypes.string,
 };
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ changeView }, dispatch);
+}
 
 export default Layout;
