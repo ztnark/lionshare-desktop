@@ -1,6 +1,5 @@
 import { observable, computed, action, asMap, autorun } from 'mobx';
 import _ from 'lodash';
-// import { ipcRenderer } from 'electron';
 
 import { currencyData } from '../../utils/currencies';
 import { formatNumber } from '../../utils/formatting';
@@ -17,10 +16,6 @@ class PortfolioStore {
   hideOnboarding = false;
 
   /* computed */
-
-  get isLoaded() {
-    return this.prices.isLoaded;
-  }
 
   get activeBalances() {
     return this.isEditing ? this.editedBalances : this.balances;
@@ -189,10 +184,16 @@ class PortfolioStore {
     this.prices = options.prices;
     this.ui = options.ui;
 
-    // Rehydrate store from persisted data
-    const data = localStorage.getItem(PORTFOLIO_KEY);
-    if (data) {
-      this.fromJSON(data);
+    // Rehydrate store from persisted datatry {
+    try {
+      const value = AsyncStorage.getItem(PORTFOLIO_KEY);
+      if (value !== null){
+        // We have data!!
+        this.fromJSON(value);
+        console.log(value);
+      }
+    } catch (error) {
+      // Error retrieving data
     }
 
     // If user doens't have assets defined,
@@ -214,13 +215,16 @@ class PortfolioStore {
 
     autorun(() => {
       // Persist store to localStorage
-      localStorage.setItem(PORTFOLIO_KEY, this.toJSON());
+      try {
+        AsyncStorage.setItem(PORTFOLIO_KEY, this.toJSON());
+      } catch (error) {
+        // Error saving data
+      }
       // Taskbar change updates
       const trayChange = formatNumber(this.totalChange, 'USD', {
         directionSymbol: true,
         minPrecision: true,
       });
-      ipcRenderer.send('priceUpdate', trayChange);
     });
   }
 }

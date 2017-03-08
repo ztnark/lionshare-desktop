@@ -1,4 +1,6 @@
 import React from 'react';
+import { View, Text } from 'react-native';
+
 
 import styles from './FatButtonStyle';
 import classNames from 'classnames/bind';
@@ -20,12 +22,12 @@ export default class FatButton extends React.Component {
 
   render() {
     return (
-      <button
+      <View
         className={ cx(styles.container, { active: this.props.active }) }
-        onClick={ this.onClick }
+        onPress={ this.onClick }
       >
-        { this.props.label }
-      </button>
+        <Text>{ this.props.label }</Text>
+      </View>
     );
   }
 }

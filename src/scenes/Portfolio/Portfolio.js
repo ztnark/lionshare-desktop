@@ -1,10 +1,8 @@
 import React, { PropTypes } from 'react';
-import { observer, inject } from 'mobx-react';
+import { View, Text } from 'react-native';
 import { Doughnut } from 'react-chartjs-2';
 
 import { formatNumber } from '../../utils/formatting';
-
-import { Flex } from 'reflexbox';
 
 import Layout from '../../components/Layout';
 import FatButton from '../../components/FatButton';
@@ -16,13 +14,13 @@ import ColoredChange from '../../components/ColoredChange';
 
 import PortfolioStore from './PortfolioStore';
 
-// import styles from './Portfolio.scss';
+import styles from './PortfolioStyle';
 
 // @inject('prices', 'ui')
 // @observer
 class Portfolio extends React.Component {
   static propTypes = {
-    prices: PropTypes.object.isRequired,
+    prices: PropTypes.array.isRequired,
     ui: PropTypes.object.isRequired,
     balances: PropTypes.object,
   }
@@ -65,41 +63,47 @@ class Portfolio extends React.Component {
   }
 
   render() {
-    let direction;
-    if (this.store.isLoaded) {
-      direction = this.store.totalChange >= 0 ? 'up' : 'down';
-    }
+    let direction = this.store.totalChange >= 0 ? 'up' : 'down';
 
     return (
-      <Layout>
-        { this.store.isLoaded && (
-          <Flex column justify="space-between" auto>
-            { !this.store.isEditing &&
-              <View className={ styles.balance }>
-              <Doughnut
+      <Layout
+        title={ 'Portfolio' }
+        activeTab="portfolio"
+        prices={this.props.prices}
+        ui={this.props.ui}
+      >
+        { (
+          <View column justify="space-between" auto>
+            {/*{ !this.store.isEditing*/}
+              <View style={ styles.balance }>
+              {/*<Doughnut
                 height={ 185 }
                 data={ this.store.doughnutData }
                 options={ this.chartOptions }
-              />
-                <View className={styles.balanceContainer}>
-                  <View className={styles.balanceAmount}>
-                    <ChangeHighlight trigger={ this.store.totalBalance }>
+              />*/}
+                <View style={styles.balanceContainer}>
+                  <View styl={styles.balanceAmount}>
+                    <Text style={{color: "white"}}>{ formatNumber(this.store.totalBalance, 'USD', { maximumFractionDigits: 0 }) }</Text>
+                    {/*<ChangeHighlight trigger={ this.store.totalBalance }>
                       { formatNumber(this.store.totalBalance, 'USD', { maximumFractionDigits: 0 }) }
-                    </ChangeHighlight>
+                    </ChangeHighlight>*/}
                   </View>
-                  <View className={ styles.balanceTotal }>
-                    <ColoredChange direction={ direction }>
+                  <View style={ styles.balanceTotal }>
+                    <Text style={{color: "white"}}>{ formatNumber(this.store.totalChange, 'USD', { directionSymbol: true,
+                                                                    minPrecision: true }) }</Text>
+                    {/*<ColoredChange direction={ direction }>
                       { formatNumber(this.store.totalChange, 'USD', { directionSymbol: true,
                                                                       minPrecision: true }) }
-                    </ColoredChange>
+                    </ColoredChange>*/}
                   </View>
                 </View>
               </View>
-            }
 
-            <Flex auto column className={styles.content}>
+
+            <View auto column className={styles.content}>
               { this.store.isEditing ? (
-                <Flex auto column>
+                <View auto column>
+                {/*
                   <EditAssets
                     balances={ this.store.editedBalances }
                     totalBalance={ this.store.totalBalance }
@@ -110,19 +114,19 @@ class Portfolio extends React.Component {
                     fiatCurrency={ this.store.fiatCurrency }
                     toggleOnboarding={ this.store.toggleOnboarding }
                     showOnboarding={ this.store.showOnboarding }
-                  />
+                  />*/}
                   { this.footer }
-                </Flex>
+                </View>
               ) : (
-                <Flex auto column>
+                <View auto column>
                   <Divider onClick={ this.store.toggleEdit }>Edit</Divider>
                   <AssetList
                     assets={ this.store.assetListData }
                   />
-                </Flex>
+                </View>
               ) }
-            </Flex>
-          </Flex>
+            </View>
+          </View>
         ) }
       </Layout>
     );
@@ -130,9 +134,9 @@ class Portfolio extends React.Component {
 }
 
 const Footer = ({ children }) => (
-  <Flex auto className={ styles.footer }>
+  <View auto className={ styles.footer }>
     { children }
-  </Flex>
+  </View>
 );
 
 export default Portfolio;
