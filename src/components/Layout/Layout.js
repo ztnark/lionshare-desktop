@@ -12,86 +12,60 @@ import ErrorMessage from '../../components/ErrorMessage';
 
 import styles from './LayoutStyle';
 
-const Layout = ({
-  ui,
-  prices,
-  children,
-  footer,
-  alwaysLoad,
-  border = true,
-}) => {
-  const onClickPrices = () => changeView('prices');
-  const onClickPortfolio = () => changeView('portfolio');
-  const onClickSettings = () => changeView('settings');
+class Layout extends React.Component {
+  static propTypes = {
+    children: React.PropTypes.node.isRequired,
+    ui: React.PropTypes.object.isRequired,
+    prices: React.PropTypes.array.isRequired,
+    border: React.PropTypes.bool,
+    footer: React.PropTypes.bool,
+    alwaysLoad: React.PropTypes.bool,
+    title: React.PropTypes.string,
+  }
+
+  onClickPrices = () => this.props.changeView('prices')
+  onClickPortfolio = () => this.props.changeView('portfolio')
+  onClickSettings = () => this.props.changeView('settings')
   // const openDonateLink = () => shell.openExternal('https://github.com/lionsharecapital/lionshare-desktop#donate');
   // const openVersionLink = () => shell.openExternal('https://github.com/lionsharecapital/lionshare-desktop/releases');
 
-  return (
-
-    <View>
-      <Header
-        border={ border }
-        onClickSettings={ onClickSettings }
-      >
-        <HeaderTab
-          onPress={ onClickPrices }
-          label="Prices"
-          active={ ui.view === 'prices' }
-        />
-        <HeaderTab
-          onPress={ onClickPortfolio }
-          label="Portfolio"
-          active={ ui.view === 'portfolio' }
-        />
-        <SettingsTab
-          onPress={ onClickSettings }
-          active={ ui.view === 'settings' }
-        />
-      </Header>
+  render(){
+    return (
       <View>
-      { prices.error && !alwaysLoad ? (
-        <ErrorMessage
-          message={ prices.error }
-          onRetry={ prices.fetchData }
-        />
-      ) : children }
-      </View>
-      { (footer || prices.error) && (
-        <View
-          align="center"
-          justify="space-between"
+        <Header
+          border={ true }
+          onClickSettings={ this.onClickSettings }
         >
-          <View
-            // onClick={ openVersionLink }
-            className={ styles.footerLink }
-            role="button"
-          >
-            <Text> v{ version } </Text>
-          </View>
-          <View
-            // onClick={ openDonateLink }
-            className={ styles.footerLink }
-            role="button"
-            title="🙏"
-          ><Text> Donate </Text></View>
+          <HeaderTab
+            onPress={ this.onClickPrices }
+            label="Prices"
+            active={ this.props.ui.view === 'prices' }
+          />
+          <HeaderTab
+            onPress={ this.onClickPortfolio }
+            label="Portfolio"
+            active={ this.props.ui.view === 'portfolio' }
+          />
+          <SettingsTab
+            onPress={ this.onClickSettings }
+            active={ this.props.ui.view === 'settings' }
+          />
+        </Header>
+        <View>
+        { this.props.prices.error && !alwaysLoad ? (
+          <ErrorMessage
+            message={ this.props.prices.error }
+            onRetry={ this.props.prices.fetchData }
+          />
+        ) : this.props.children }
         </View>
-      ) }
-    </View>
-  );
-};
-
-Layout.propTypes = {
-  children: React.PropTypes.node.isRequired,
-  ui: React.PropTypes.object.isRequired,
-  prices: React.PropTypes.array.isRequired,
-  border: React.PropTypes.bool,
-  footer: React.PropTypes.bool,
-  alwaysLoad: React.PropTypes.bool,
-  title: React.PropTypes.string,
+      </View>
+    );
+  }
 };
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({ changeView }, dispatch);
 }
 
-export default Layout;
+export default connect(null, mapDispatchToProps)(Layout);
