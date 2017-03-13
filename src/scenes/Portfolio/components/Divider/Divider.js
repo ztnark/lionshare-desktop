@@ -1,20 +1,24 @@
 import React from 'react';
-import { Flex } from 'reflexbox';
+import { View, Text, TouchableHighlight } from 'react-native';
 
 import styles from './DividerStyle';
 import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
 
-const Divider = ({ children, onClick, active }) => (
-  <Flex
-    align="center"
-    justify="center"
-    className={ cx(styles.container, { active }) }
+const Divider = ({ children, onPress, active }) => (
+  <View
+    style={{flexDirection: 'row', flexShrink: 0}}
   >
-    <View className={ cx(styles.content, { action: onClick }) } onClick={ onClick }>
-      { children }
+    <View style={styles.line}>
     </View>
-  </Flex>
+    <View>
+      <TouchableHighlight style={ styles.content } onPress={ onPress }>
+        <Text style={ styles.contentFont}>{ children }</Text>
+      </TouchableHighlight>
+    </View>
+    <View style={styles.line}>
+    </View>
+  </View>
 );
 
 export default Divider;

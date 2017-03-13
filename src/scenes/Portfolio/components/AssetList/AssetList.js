@@ -1,6 +1,5 @@
 import React from 'react';
-import { Flex } from 'reflexbox';
-import { observer } from 'mobx-react';
+import { View, Text } from 'react-native';
 import _ from 'lodash';
 
 import { formatNumber } from '../../../../utils/formatting';
@@ -10,7 +9,7 @@ import CurrencyColor from '../../../../components/CurrencyColor';
 import ChangeHighlight from '../../../../components/ChangeHighlight';
 import ColoredChange from '../../../../components/ColoredChange';
 
-// import styles from './AssetList.scss';
+import styles from './AssetListStyle.js';
 
 const AssetList = ({ assets }) => {
   // Order assets based on the "official order"
@@ -20,14 +19,14 @@ const AssetList = ({ assets }) => {
   });
 
   return (
-    <Flex auto column className={ styles.container }>
+    <View auto column className={ styles.container }>
       { sortedAssets.map(asset => (
         <AssetRow
           key={ asset.symbol }
           { ...asset }
         />
       )) }
-    </Flex>
+    </View>
   );
 };
 
@@ -42,34 +41,34 @@ const AssetRow = ({
   const direction = change >= 0 ? 'up' : 'down';
 
   return (
-    <Flex
+    <View
       align="center"
       justify="space-between"
       className={ styles.row }
     >
-      <Flex align="flex-start">
+      <View align="flex-start">
         <CurrencyColor color={ color } className={ styles.colorDot } />
-        <Flex column>
+        <View column>
           <View>{ name }</View>
           <View className={ styles.balance }>
             { formatNumber(balance) } { symbol }
           </View>
-        </Flex>
-      </Flex>
+        </View>
+      </View>
       <View>
-        <Flex justify="flex-end">
+        <View justify="flex-end">
           <ChangeHighlight trigger={ nativeBalance }>
             { formatNumber(nativeBalance, 'USD', { minPrecision: true }) }
           </ChangeHighlight>
-        </Flex>
-        <Flex justify="flex-end">
+        </View>
+        <View justify="flex-end">
           <ColoredChange direction={ direction }>
             { formatNumber(change, 'USD', { directionSymbol: true, minPrecision: true }) }
           </ColoredChange>
-        </Flex>
+        </View>
       </View>
-    </Flex>
+    </View>
   );
 };
 
-export default observer(AssetList);
+export default AssetList;

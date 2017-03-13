@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react';
 import { View, Text } from 'react-native';
-import { Doughnut } from 'react-chartjs-2';
+import Svg,{
+    Circle
+} from 'react-native-svg';
 
 import { formatNumber } from '../../utils/formatting';
 
@@ -33,7 +35,7 @@ class Portfolio extends React.Component {
     });
   }
 
-  get chartOptions() {
+  chartOptions() {
     return {
       cutoutPercentage: 95,
       tooltips: {
@@ -43,7 +45,11 @@ class Portfolio extends React.Component {
     };
   }
 
-  get footer() {
+  tap(){
+    debugger;
+  }
+
+  footer() {
     return (
       <Footer>
         { this.store.showEditCancel && (
@@ -73,7 +79,7 @@ class Portfolio extends React.Component {
         ui={this.props.ui}
       >
         { (
-          <View column justify="space-between" auto>
+          <View column justify="space-between" auto style={{"height": 613, backgroundColor: "black"}}>
             {/*{ !this.store.isEditing*/}
               <View style={ styles.balance }>
               {/*<Doughnut
@@ -81,15 +87,23 @@ class Portfolio extends React.Component {
                 data={ this.store.doughnutData }
                 options={ this.chartOptions }
               />*/}
+              <Svg height="230" width="230">
+                <Circle cx="110"
+                    cy="110"
+                    r="100"
+                    stroke="#FD7322"
+                    strokeWidth="5"/>
+              </Svg>
+
                 <View style={styles.balanceContainer}>
-                  <View styl={styles.balanceAmount}>
-                    <Text style={{color: "white"}}>{ formatNumber(this.store.totalBalance, 'USD', { maximumFractionDigits: 0 }) }</Text>
+                  <View>
+                    <Text style={{color: "white", textAlign:"center", fontSize: 32}}>{ formatNumber(this.store.totalBalance, 'USD', { maximumFractionDigits: 0 }) }</Text>
                     {/*<ChangeHighlight trigger={ this.store.totalBalance }>
                       { formatNumber(this.store.totalBalance, 'USD', { maximumFractionDigits: 0 }) }
                     </ChangeHighlight>*/}
                   </View>
-                  <View style={ styles.balanceTotal }>
-                    <Text style={{color: "white"}}>{ formatNumber(this.store.totalChange, 'USD', { directionSymbol: true,
+                  <View>
+                    <Text style={{color: "#35C94A", textTransform: "uppercase"}}>{ formatNumber(this.store.totalChange, 'USD', { directionSymbol: true,
                                                                     minPrecision: true }) }</Text>
                     {/*<ColoredChange direction={ direction }>
                       { formatNumber(this.store.totalChange, 'USD', { directionSymbol: true,
@@ -100,8 +114,8 @@ class Portfolio extends React.Component {
               </View>
 
 
-            <View auto column className={styles.content}>
-              { this.store.isEditing ? (
+            <View column>
+              { !this.store.isEditing ? (
                 <View auto column>
                 {/*
                   <EditAssets
@@ -118,8 +132,8 @@ class Portfolio extends React.Component {
                   { this.footer }
                 </View>
               ) : (
-                <View auto column>
-                  <Divider onClick={ this.store.toggleEdit }>Edit</Divider>
+                <View column>
+                  <Divider onPress={ this.tap }>Edit</Divider>
                   <AssetList
                     assets={ this.store.assetListData }
                   />
