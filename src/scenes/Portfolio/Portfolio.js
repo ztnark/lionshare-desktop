@@ -45,23 +45,17 @@ class Portfolio extends React.Component {
     };
   }
 
-  tap(){
-    debugger;
-  }
-
   footer() {
     return (
       <Footer>
-        { this.store.showEditCancel && (
-          <FatButton
-            label="Cancel"
-            onClick={ this.store.toggleEdit }
-            active
-          />
-        ) }
+        <FatButton
+          label="Cancel"
+          onPress={ this.store.toggleEdit }
+          active
+        />
         <FatButton
           label="Save"
-          onClick={ this.store.saveEdit }
+          onPress={ this.store.saveEdit }
           active={ this.store.allowSave }
         />
       </Footer>
@@ -115,7 +109,7 @@ class Portfolio extends React.Component {
 
 
             <View column>
-              { !this.store.isEditing ? (
+              { this.store.isEditing ? (
                 <View auto column>
                 {/*
                   <EditAssets
@@ -129,11 +123,11 @@ class Portfolio extends React.Component {
                     toggleOnboarding={ this.store.toggleOnboarding }
                     showOnboarding={ this.store.showOnboarding }
                   />*/}
-                  { this.footer }
+                  { this.footer() }
                 </View>
               ) : (
                 <View column>
-                  <Divider onPress={ this.tap }>Edit</Divider>
+                  <Divider onPress={ this.store.toggleEdit }>Edit</Divider>
                   <AssetList
                     assets={ this.store.assetListData }
                   />
@@ -148,7 +142,7 @@ class Portfolio extends React.Component {
 }
 
 const Footer = ({ children }) => (
-  <View auto className={ styles.footer }>
+  <View auto style={ styles.footer }>
     { children }
   </View>
 );

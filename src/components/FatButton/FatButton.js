@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableHighlight } from 'react-native';
 
 
 import styles from './FatButtonStyle';
@@ -10,24 +10,25 @@ export default class FatButton extends React.Component {
   static propTypes = {
     label: React.PropTypes.string.isRequired,
     active: React.PropTypes.bool,
-    onClick: React.PropTypes.func,
+    onPress: React.PropTypes.func,
   }
 
-  onClick = (event) => {
+  onPress = (event) => {
+    debugger;
     event.preventDefault();
     if (this.props.active) {
-      this.props.onClick();
+      this.props.onPress();
     }
   }
 
   render() {
     return (
-      <View
+      <TouchableHighlight
         className={ cx(styles.container, { active: this.props.active }) }
-        onPress={ this.onClick }
+        onPress={ this.props.onPress }
       >
         <Text>{ this.props.label }</Text>
-      </View>
+      </TouchableHighlight>
     );
   }
 }

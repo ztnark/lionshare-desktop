@@ -106,7 +106,6 @@ class PortfolioStore {
   /* actions */
 
   toggleEdit = () => {
-    debugger;
     this.isEditing = !this.isEditing;
     this.editedBalances.clear();
     this.editMode = 'crypto';
