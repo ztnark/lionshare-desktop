@@ -111,7 +111,6 @@ class Portfolio extends React.Component {
             <View column>
               { this.store.isEditing ? (
                 <View auto column>
-                {/*
                   <EditAssets
                     balances={ this.store.editedBalances }
                     totalBalance={ this.store.totalBalance }
@@ -121,8 +120,8 @@ class Portfolio extends React.Component {
                     toggleEditMode={ this.store.toggleEditMode }
                     fiatCurrency={ this.store.fiatCurrency }
                     toggleOnboarding={ this.store.toggleOnboarding }
-                    showOnboarding={ this.store.showOnboarding }
-                  />*/}
+                    showOnboarding={ true }
+                  />
                   { this.footer() }
                 </View>
               ) : (
