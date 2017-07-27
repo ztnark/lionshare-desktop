@@ -1,5 +1,4 @@
 import React from 'react';
-import { Flex } from 'reflexbox';
 
 import styles from './SettingToggleStyle';
 import classNames from 'classnames/bind';

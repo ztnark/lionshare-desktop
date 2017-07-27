@@ -1,6 +1,6 @@
 import React, { PropTypes }from 'react';
-import { observer, inject } from 'mobx-react';
-import { Flex } from 'reflexbox';
+import { observer } from 'mobx-react';
+
 // import { shell } from 'electron';
 
 import { CURRENCIES } from '../../utils/currencies';

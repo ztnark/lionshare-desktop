@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import numeral from 'numeral';
-import { observable, computed, action, autorun } from 'mobx';
 import ReconnectingWebsocket from 'reconnecting-websocket';
 import { AsyncStorage } from 'react-native';
 

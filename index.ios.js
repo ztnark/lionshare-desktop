@@ -4,7 +4,6 @@ import { AppRegistry, View, Text, StatusBar } from 'react-native';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import ReduxPromise from 'redux-promise';
-import { Flex } from 'reflexbox';
 import stores from './src/stores';
 import WSInstance from './src/utils/ChatWebsocket';
 import * as ChatActions from './src/actions/ChatActions';
@@ -31,7 +30,7 @@ const App = () => (
 );
 
 // Render it to device
-AppRegistry.registerComponent('lionshare', () => App);
+AppRegistry.registerComponent('lionshareMobile3', () => App);
 
 const sock = {
   ws: null,

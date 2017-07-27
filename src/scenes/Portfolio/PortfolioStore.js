@@ -7,10 +7,10 @@ import { formatNumber } from '../../utils/formatting';
 const PORTFOLIO_KEY = 'PORTFOLIO_KEY';
 
 class PortfolioStore {
-  balances = asMap({});
-  changes = asMap({});
+  balances = observable.map({});
+  changes = observable.map({});
   editMode = 'crypto';
-  editedBalances = asMap({}); // Temporary when user enters edit mode
+  editedBalances = observable.map({}); // Temporary when user enters edit mode
 
   isEditing = false;
   hideOnboarding = false;

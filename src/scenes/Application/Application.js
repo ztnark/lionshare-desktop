@@ -13,7 +13,7 @@ class Application extends React.Component {
   }
 
   renderView = () => {
-    this.props.ui.view = 'portfolio'
+    this.props.ui.view = 'prices'
     switch (this.props.ui.view) {
       case 'prices':
         return <Prices prices={this.props.prices} ui={this.props.ui}/>;

@@ -91,7 +91,7 @@ class Portfolio extends React.Component {
 
                 <View style={styles.balanceContainer}>
                   <View>
-                    <Text style={{color: "white", textAlign:"center", fontSize: 32}}>{ formatNumber(this.store.totalBalance, 'USD', { maximumFractionDigits: 0 }) }</Text>
+                    <Text style={{color: "white", textAlign:"center", fontSize: 32}}>{ formatNumber(this.store.totalBalance, 'USD', { maximumFractionDigits: 2 }) }</Text>
                     {/*<ChangeHighlight trigger={ this.store.totalBalance }>
                       { formatNumber(this.store.totalBalance, 'USD', { maximumFractionDigits: 0 }) }
                     </ChangeHighlight>*/}
