@@ -1,8 +1,8 @@
 # Lionshare Mobile
 
-![1-diwz_x9p3c86sfo-gydi5a](http://imgur.com/a/cSQ1)
+![](http://imgur.com/a/cSQ1)
 
-This repository is a fork of the original desktop project,[Lionshare](https://github.com/lionsharecapital/lionshare-desktop)
+This repository is a fork of the original desktop project, [Lionshare Desktop](https://github.com/lionsharecapital/lionshare-desktop)
 
 Lionshare Mobile is a simple mobile application that helps you track cryptocurrencies and
 your portfolio. Build using React Native and Redux.
