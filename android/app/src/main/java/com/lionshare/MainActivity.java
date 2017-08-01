@@ -1,4 +1,4 @@
-package com.lionsharemobile3;
+package com.lionshare;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "lionshareMobile3";
+        return "lionshare";
     }
 }

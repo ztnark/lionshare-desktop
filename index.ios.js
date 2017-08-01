@@ -30,7 +30,7 @@ const App = () => (
 );
 
 // Render it to device
-AppRegistry.registerComponent('lionshareMobile3', () => App);
+AppRegistry.registerComponent('lionshare', () => App);
 
 const sock = {
   ws: null,

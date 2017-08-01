@@ -1,4 +1,4 @@
-package com.lionsharemobile3;
+package com.lionshare;
 
 import android.app.Application;
 

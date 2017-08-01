@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Image } from 'react-native';
 
 import styles from './HeaderStyle';
 import classNames from 'classnames/bind';
@@ -10,7 +10,7 @@ const Header = (props) => (
     justify="center"
     style={styles.header}
   >
-    { props.children }
+    <Image style={{width: 25, height: 25, margin: 5}} source={require('../../assets/icon.png')}/>
   </View>
 );
 

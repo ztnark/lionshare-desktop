@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "lionshareMobile3.app"
-               BlueprintName = "lionshareMobile3"
-               ReferencedContainer = "container:lionshareMobile3.xcodeproj">
+               BuildableName = "lionshare.app"
+               BlueprintName = "lionshare"
+               ReferencedContainer = "container:lionshare.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "lionshareMobile3Tests.xctest"
-               BlueprintName = "lionshareMobile3Tests"
-               ReferencedContainer = "container:lionshareMobile3.xcodeproj">
+               BuildableName = "lionshareTests.xctest"
+               BlueprintName = "lionshareTests"
+               ReferencedContainer = "container:lionshare.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -61,9 +61,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "lionshareMobile3Tests.xctest"
-               BlueprintName = "lionshareMobile3Tests"
-               ReferencedContainer = "container:lionshareMobile3.xcodeproj">
+               BuildableName = "lionshareTests.xctest"
+               BlueprintName = "lionshareTests"
+               ReferencedContainer = "container:lionshare.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -71,9 +71,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "lionshareMobile3.app"
-            BlueprintName = "lionshareMobile3"
-            ReferencedContainer = "container:lionshareMobile3.xcodeproj">
+            BuildableName = "lionshare.app"
+            BlueprintName = "lionshare"
+            ReferencedContainer = "container:lionshare.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -94,9 +94,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "lionshareMobile3.app"
-            BlueprintName = "lionshareMobile3"
-            ReferencedContainer = "container:lionshareMobile3.xcodeproj">
+            BuildableName = "lionshare.app"
+            BlueprintName = "lionshare"
+            ReferencedContainer = "container:lionshare.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -113,9 +113,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "lionshareMobile3.app"
-            BlueprintName = "lionshareMobile3"
-            ReferencedContainer = "container:lionshareMobile3.xcodeproj">
+            BuildableName = "lionshare.app"
+            BlueprintName = "lionshare"
+            ReferencedContainer = "container:lionshare.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

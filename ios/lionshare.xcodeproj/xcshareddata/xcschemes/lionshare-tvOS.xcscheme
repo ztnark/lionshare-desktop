@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-               BuildableName = "lionshareMobile3-tvOS.app"
-               BlueprintName = "lionshareMobile3-tvOS"
-               ReferencedContainer = "container:lionshareMobile3.xcodeproj">
+               BuildableName = "lionshare-tvOS.app"
+               BlueprintName = "lionshare-tvOS"
+               ReferencedContainer = "container:lionshare.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
-               BuildableName = "lionshareMobile3-tvOSTests.xctest"
-               BlueprintName = "lionshareMobile3-tvOSTests"
-               ReferencedContainer = "container:lionshareMobile3.xcodeproj">
+               BuildableName = "lionshare-tvOSTests.xctest"
+               BlueprintName = "lionshare-tvOSTests"
+               ReferencedContainer = "container:lionshare.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -61,9 +61,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
-               BuildableName = "lionshareMobile3-tvOSTests.xctest"
-               BlueprintName = "lionshareMobile3-tvOSTests"
-               ReferencedContainer = "container:lionshareMobile3.xcodeproj">
+               BuildableName = "lionshare-tvOSTests.xctest"
+               BlueprintName = "lionshare-tvOSTests"
+               ReferencedContainer = "container:lionshare.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -71,9 +71,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "lionshareMobile3-tvOS.app"
-            BlueprintName = "lionshareMobile3-tvOS"
-            ReferencedContainer = "container:lionshareMobile3.xcodeproj">
+            BuildableName = "lionshare-tvOS.app"
+            BlueprintName = "lionshare-tvOS"
+            ReferencedContainer = "container:lionshare.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -94,9 +94,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "lionshareMobile3-tvOS.app"
-            BlueprintName = "lionshareMobile3-tvOS"
-            ReferencedContainer = "container:lionshareMobile3.xcodeproj">
+            BuildableName = "lionshare-tvOS.app"
+            BlueprintName = "lionshare-tvOS"
+            ReferencedContainer = "container:lionshare.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -113,9 +113,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "lionshareMobile3-tvOS.app"
-            BlueprintName = "lionshareMobile3-tvOS"
-            ReferencedContainer = "container:lionshareMobile3.xcodeproj">
+            BuildableName = "lionshare-tvOS.app"
+            BlueprintName = "lionshare-tvOS"
+            ReferencedContainer = "container:lionshare.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
