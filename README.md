@@ -19,7 +19,7 @@ All React Native application code is stored inside `src/`.
 To install for development, clone the repository and install the dependencies with `npm install`.
 
 ```bash
-$ git clone git@github.com:ztnark/lionshare-mobile.gitfd$a
+$ git clone git@github.com:ztnark/lionshare-mobile.git
 $ cd lionshare-mobile
 $ npm install
 ```
