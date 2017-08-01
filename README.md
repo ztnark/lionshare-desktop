@@ -1,6 +1,6 @@
 # Lionshare Mobile
 
-![](http://imgur.com/a/cSQ1)
+<img src="http://i.imgur.com/hOV6cDO.png" style="max-width:100%;">
 
 This repository is a fork of the original desktop project, [Lionshare Desktop](https://github.com/lionsharecapital/lionshare-desktop)
 
